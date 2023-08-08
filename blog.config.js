@@ -19,12 +19,10 @@ const BLOG = {
 
   CUSTOM_MENU: process.env.NEXT_PUBLIC_CUSTOM_MENU || false, // 支持Menu 类型，从3.12.0版本起，各主题将逐步支持灵活的二级菜单配置，替代了原来的Page类型，此配置是试验功能、默认关闭。
 
-
   AUTHOR: process.env.NEXT_PUBLIC_AUTHOR || '皮卡秋', // 您的昵称 例如 tangly1024
   BIO: process.env.NEXT_PUBLIC_BIO || '一个普通的打工人🍚', // 作者简介
   LINK: process.env.NEXT_PUBLIC_LINK || 'https://pikachu1024.com', // 网站地址
   KEYWORDS: process.env.NEXT_PUBLIC_KEYWORD || '皮卡秋,博客', // 网站关键词 英文逗号隔开
-
 
   // 社交链接，不需要可留空白，例如 CONTACT_WEIBO:''
   CONTACT_EMAIL: process.env.NEXT_PUBLIC_CONTACT_EMAIL || '2661158759@qq.com', // 邮箱地址 例如mail@tangly1024.com
@@ -181,8 +179,13 @@ const BLOG = {
   STARRY_SKY: process.env.NEXT_PUBLIC_STARRY_SKY || true, // 开关
 
   //   ********挂件组件相关********
-  // Chatbase
-  CHATBASE_ID: process.env.NEXT_PUBLIC_CHATBASE_ID || null, // 是否显示chatbase机器人 https://www.chatbase.co/
+  // Chatbase 是否显示chatbase机器人 https://www.chatbase.co/
+  CHATBASE_ID: process.env.NEXT_PUBLIC_CHATBASE_ID || null,
+  // WebwhizAI 机器人 @see https://github.com/webwhiz-ai/webwhiz
+  WEB_WHIZ_ENABLED: process.env.NEXT_PUBLIC_WEB_WHIZ_ENABLED || false, // 是否显示
+  WEB_WHIZ_BASE_URL: process.env.NEXT_PUBLIC_WEB_WHIZ_BASE_URL || 'https://api.webwhiz.ai', // 可以自建服务器
+  WEB_WHIZ_CHAT_BOT_ID: process.env.NEXT_PUBLIC_WEB_WHIZ_CHAT_BOT_ID || null, // 在后台获取ID
+
   // 悬浮挂件
   WIDGET_PET: process.env.NEXT_PUBLIC_WIDGET_PET || true, // 是否显示宠物挂件
   WIDGET_PET_LINK:
@@ -262,7 +265,7 @@ const BLOG = {
         process.env.NEXT_PUBLIC_COMMENT_CUSDIS_HOST || 'https://cusdis.com', // data-host, change this if you're using self-hosted version
   COMMENT_CUSDIS_SCRIPT_SRC:
         process.env.NEXT_PUBLIC_COMMENT_CUSDIS_SCRIPT_SRC ||
-        'https://cusdis.com/js/cusdis.es.js', // change this if you're using self-hosted version
+        '/js/cusdis.es.js', // change this if you're using self-hosted version
 
   // gitalk评论插件 更多参考 https://gitalk.github.io/
   COMMENT_GITALK_REPO: process.env.NEXT_PUBLIC_COMMENT_GITALK_REPO || '', // 你的Github仓库名，例如 'NotionNext'
@@ -373,7 +376,6 @@ const BLOG = {
         process.env.NEXT_PUBLIC_HOME_BANNER_IMAGE || '/bg_image.jpg', // 首页背景大图, 会被notion中的封面图覆盖，若无封面图则会使用代码中的 /public/bg_image.jpg 文件
   DESCRIPTION:
       process.env.NEXT_PUBLIC_DESCRIPTION || '皮卡秋的博客', // 站点描述，被notion中的页面描述覆盖
-
 
   // 网站图片
   IMG_LAZY_LOAD_PLACEHOLDER: process.env.NEXT_PUBLIC_IMG_LAZY_LOAD_PLACEHOLDER || 'data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==', // 懒加载占位图片地址，支持base64或url

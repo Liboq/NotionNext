@@ -3,6 +3,7 @@
 import Comment from '@/components/Comment'
 import { AdSlot } from '@/components/GoogleAdsense'
 import Live2D from '@/components/Live2D'
+import LoadingCover from '@/components/LoadingCover'
 import NotionIcon from '@/components/NotionIcon'
 import NotionPage from '@/components/NotionPage'
 import ShareBar from '@/components/ShareBar'
@@ -19,9 +20,10 @@ import ArticleAround from './components/ArticleAround'
 import ArticleInfo from './components/ArticleInfo'
 import { ArticleLock } from './components/ArticleLock'
 import BlogArchiveItem from './components/BlogArchiveItem'
+import BottomMenuBar from './components/BottomMenuBar'
 import Catalog from './components/Catalog'
+import CatalogDrawerWrapper from './components/CatalogDrawerWrapper'
 import CategoryItem from './components/CategoryItem'
-import FloatTocButton from './components/FloatTocButton'
 import Footer from './components/Footer'
 import Header from './components/Header'
 import InfoCard from './components/InfoCard'
@@ -31,7 +33,6 @@ import PageNavDrawer from './components/PageNavDrawer'
 import RevolverMaps from './components/RevolverMaps'
 import SearchInput from './components/SearchInput'
 import TagItemMini from './components/TagItemMini'
-import TocDrawer from './components/TocDrawer'
 import CONFIG from './config'
 import { Style } from './style'
 
@@ -107,13 +108,17 @@ const LayoutBase = props => {
   const [pageNavVisible, changePageNavVisible] = useState(false)
   const [filteredNavPages, setFilteredNavPages] = useState(allNavPages)
 
-  const showTocButton = post?.toc?.length > 1
   const searchModal = useRef(null)
 
   useEffect(() => {
     setFilteredNavPages(getNavPagesWithLatest(allNavPages, latestPosts, post))
   }, [router])
 
+  const GITBOOK_LOADING_COVER = siteConfig(
+    'GITBOOK_LOADING_COVER',
+    true,
+    CONFIG
+  )
   return (
     <ThemeGlobalGitbook.Provider
       value={{
@@ -130,7 +135,7 @@ const LayoutBase = props => {
 
       <div
         id='theme-gitbook'
-        className={`${siteConfig('FONT_STYLE')} scroll-smooth bg-white dark:bg-hexo-black-gray w-full h-full min-h-screen justify-center dark:text-gray-300`}>
+        className={`${siteConfig('FONT_STYLE')} pb-16 md:pb-0 scroll-smooth bg-white dark:bg-hexo-black-gray w-full h-full min-h-screen justify-center dark:text-gray-300`}>
         <AlgoliaSearchModal cRef={searchModal} {...props} />
 
         {/* 顶部导航栏 */}
@@ -139,9 +144,8 @@ const LayoutBase = props => {
         <main
           id='wrapper'
           className={
-            (JSON.parse(siteConfig('LAYOUT_SIDEBAR_REVERSE'))
-              ? 'flex-row-reverse'
-              : '') + 'relative flex justify-between w-full h-full mx-auto'
+            (siteConfig('LAYOUT_SIDEBAR_REVERSE') ? 'flex-row-reverse' : '') +
+            'relative flex justify-between w-full h-full mx-auto'
           }>
           {/* 左侧推拉抽屉 */}
           {fullWidth ? null : (
@@ -149,16 +153,19 @@ const LayoutBase = props => {
               className={
                 'hidden md:block border-r dark:border-transparent relative z-10 dark:bg-hexo-black-gray'
               }>
-              <div className='w-72 py-14 px-6 sticky top-0 overflow-y-scroll h-screen scroll-hidden'>
-                {slotLeft}
-                <SearchInput className='my-3 rounded-md' />
-                <div className='mb-20'>
+              <div className='w-72 pt-14 pb-4 px-6 sticky top-0 h-screen flex justify-between flex-col'>
+                {/* 导航 */}
+                <div className='overflow-y-scroll scroll-hidden'>
+                  {/* 嵌入 */}
+                  {slotLeft}
+                  {/* 搜索框 */}
+                  <SearchInput className='my-3 rounded-md' />
+
+                  {/* 文章列表 */}
                   {/* 所有文章列表 */}
                   <NavPostList filteredNavPages={filteredNavPages} />
                 </div>
-              </div>
-
-              <div className='w-72 fixed left-0 bottom-0 z-20 bg-white'>
+                {/* 页脚 */}
                 <Footer {...props} />
               </div>
             </div>
@@ -211,6 +218,7 @@ const LayoutBase = props => {
                 <ArticleInfo post={props?.post ? props?.post : props.notice} />
 
                 <div className='py-4'>
+                  {/* 桌面端目录 */}
                   <Catalog {...props} />
                   {slotRight}
                   {router.route === '/' && (
@@ -235,18 +243,13 @@ const LayoutBase = props => {
           )}
         </main>
 
-        {/* 移动端悬浮目录按钮 */}
-        {showTocButton && !tocVisible && (
-          <div className='md:hidden fixed right-0 bottom-52 z-30 bg-white border-l border-t border-b dark:border-gray-800 rounded'>
-            <FloatTocButton {...props} />
-          </div>
-        )}
+        {GITBOOK_LOADING_COVER && <LoadingCover />}
 
         {/* 移动端导航抽屉 */}
         <PageNavDrawer {...props} filteredNavPages={filteredNavPages} />
 
         {/* 移动端底部导航栏 */}
-        {/* <BottomMenuBar {...props} className='block md:hidden' /> */}
+        <BottomMenuBar {...props} />
       </div>
     </ThemeGlobalGitbook.Provider>
   )
@@ -338,8 +341,10 @@ const LayoutSlug = props => {
 
           {/* Notion文章主体 */}
           {post && (
-            <section id='article-wrapper' className='px-1'>
-              <NotionPage post={post} />
+            <section className='px-1'>
+              <div id='article-wrapper'>
+                <NotionPage post={post} />
+              </div>
 
               {/* 分享 */}
               <ShareBar post={post} />
@@ -366,7 +371,8 @@ const LayoutSlug = props => {
             </section>
           )}
 
-          <TocDrawer {...props} />
+          {/* 文章目录 */}
+          <CatalogDrawerWrapper {...props} />
         </div>
       )}
     </>
